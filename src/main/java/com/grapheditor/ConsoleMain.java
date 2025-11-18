@@ -12,6 +12,10 @@ public class ConsoleMain {
     public static void main(String[] args) {
         System.out.println("=== Графовый редактор (консольная версия) ===\n");
 
+        // Автоматическое создание примеров при запуске
+        createExampleGraphs();
+        System.out.println("✓ Созданы примеры графов для демонстрации\n");
+
         boolean running = true;
         while (running) {
             printMenu();
@@ -33,6 +37,7 @@ public class ConsoleMain {
                 case "13": loadGraph(); break;
                 case "14": listGraphs(); break;
                 case "15": runTests(); break;
+                case "16": createExampleGraphs(); System.out.println("Примеры созданы!"); break;
                 case "0": running = false; break;
                 default: System.out.println("Неверный выбор!");
             }
@@ -59,6 +64,7 @@ public class ConsoleMain {
         System.out.println("13. Загрузить граф");
         System.out.println("14. Список графов");
         System.out.println("15. Запустить тесты");
+        System.out.println("16. Создать примеры графов");
         System.out.println("0. Выход");
         System.out.print("Выбор: ");
     }
@@ -475,5 +481,125 @@ public class ConsoleMain {
             g.addEdge(new Edge(nodes.get(i), nodes.get(i + 1), false));
         }
         return g;
+    }
+
+    // Создание примеров графов для демонстрации
+    private static void createExampleGraphs() {
+        // 1. Дерево (звезда)
+        Graph tree = new Graph("Дерево");
+        Node center = new Node(100, 100);
+        center.setName("Центр");
+        tree.addNode(center);
+        for (int i = 1; i <= 4; i++) {
+            Node leaf = new Node(100 + i * 50, 100 + i * 30);
+            leaf.setName("Лист" + i);
+            tree.addNode(leaf);
+            tree.addEdge(new Edge(center, leaf, false));
+        }
+        graphs.put("Дерево", tree);
+
+        // 2. Треугольник (простой цикл)
+        Graph triangle = new Graph("Треугольник");
+        Node t1 = new Node(0, 0);
+        Node t2 = new Node(100, 0);
+        Node t3 = new Node(50, 100);
+        t1.setName("A");
+        t2.setName("B");
+        t3.setName("C");
+        triangle.addNode(t1);
+        triangle.addNode(t2);
+        triangle.addNode(t3);
+        triangle.addEdge(new Edge(t1, t2, false));
+        triangle.addEdge(new Edge(t2, t3, false));
+        triangle.addEdge(new Edge(t3, t1, false));
+        graphs.put("Треугольник", triangle);
+
+        // 3. Полный граф K4
+        Graph k4 = new Graph("K4");
+        Node[] k4nodes = new Node[4];
+        for (int i = 0; i < 4; i++) {
+            k4nodes[i] = new Node(i * 60, i * 60);
+            k4nodes[i].setName("V" + (i + 1));
+            k4.addNode(k4nodes[i]);
+        }
+        for (int i = 0; i < 4; i++) {
+            for (int j = i + 1; j < 4; j++) {
+                k4.addEdge(new Edge(k4nodes[i], k4nodes[j], false));
+            }
+        }
+        graphs.put("K4", k4);
+
+        // 4. Путь P5
+        Graph p5 = new Graph("Путь P5");
+        Node[] p5nodes = new Node[5];
+        for (int i = 0; i < 5; i++) {
+            p5nodes[i] = new Node(i * 70, 100);
+            p5nodes[i].setName("P" + (i + 1));
+            p5.addNode(p5nodes[i]);
+        }
+        for (int i = 0; i < 4; i++) {
+            p5.addEdge(new Edge(p5nodes[i], p5nodes[i + 1], false));
+        }
+        graphs.put("Путь P5", p5);
+
+        // 5. Ориентированный граф
+        Graph directed = new Graph("Ориентированный");
+        Node d1 = new Node(0, 0);
+        Node d2 = new Node(100, 0);
+        Node d3 = new Node(100, 100);
+        Node d4 = new Node(0, 100);
+        d1.setName("Start");
+        d2.setName("Mid1");
+        d3.setName("Mid2");
+        d4.setName("End");
+        directed.addNode(d1);
+        directed.addNode(d2);
+        directed.addNode(d3);
+        directed.addNode(d4);
+        directed.addEdge(new Edge(d1, d2, true));
+        directed.addEdge(new Edge(d2, d3, true));
+        directed.addEdge(new Edge(d3, d4, true));
+        directed.addEdge(new Edge(d1, d4, true));
+        graphs.put("Ориентированный", directed);
+
+        // 6. Маленький граф для произведений
+        Graph k2 = new Graph("K2");
+        Node k21 = new Node(0, 0);
+        Node k22 = new Node(100, 0);
+        k21.setName("X");
+        k22.setName("Y");
+        k2.addNode(k21);
+        k2.addNode(k22);
+        k2.addEdge(new Edge(k21, k22, false));
+        graphs.put("K2", k2);
+
+        // 7. Квадрат (для демонстрации гамильтонова цикла)
+        Graph square = new Graph("Квадрат");
+        Node s1 = new Node(0, 0);
+        Node s2 = new Node(100, 0);
+        Node s3 = new Node(100, 100);
+        Node s4 = new Node(0, 100);
+        s1.setName("A");
+        s2.setName("B");
+        s3.setName("C");
+        s4.setName("D");
+        square.addNode(s1);
+        square.addNode(s2);
+        square.addNode(s3);
+        square.addNode(s4);
+        square.addEdge(new Edge(s1, s2, false));
+        square.addEdge(new Edge(s2, s3, false));
+        square.addEdge(new Edge(s3, s4, false));
+        square.addEdge(new Edge(s4, s1, false));
+        graphs.put("Квадрат", square);
+
+        System.out.println("Созданы примеры:");
+        System.out.println("  1. Дерево (звезда с 5 узлами)");
+        System.out.println("  2. Треугольник (цикл из 3 узлов)");
+        System.out.println("  3. K4 (полный граф на 4 узлах)");
+        System.out.println("  4. Путь P5 (путь из 5 узлов)");
+        System.out.println("  5. Ориентированный (граф с дугами)");
+        System.out.println("  6. K2 (для произведений)");
+        System.out.println("  7. Квадрат (гамильтонов цикл)");
     }
 }
