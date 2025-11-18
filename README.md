@@ -28,19 +28,34 @@
 
 ## Запуск программы
 
-### Вариант 1: Через Maven (требуется интернет)
+### Вариант 1: Запуск JAR (самый простой)
 ```bash
-mvn clean package
-java -jar target/graph-editor-1.0-SNAPSHOT.jar
+# Если JAR уже собран
+java -jar target/graph-editor.jar
+
+# Если нужно пересобрать
+./run.sh
 ```
 
 ### Вариант 2: Прямая компиляция
 ```bash
 # Компиляция
+mkdir -p target/classes
 find src -name "*.java" | xargs javac -d target/classes
 
+# Создание JAR
+cd target/classes && jar cfe ../graph-editor.jar com.grapheditor.Main . && cd ../..
+
 # Запуск
+java -jar target/graph-editor.jar
+# или
 java -cp target/classes com.grapheditor.Main
+```
+
+### Вариант 3: Через Maven (требуется интернет)
+```bash
+mvn clean package
+java -jar target/graph-editor-1.0-SNAPSHOT.jar
 ```
 
 ## Использование

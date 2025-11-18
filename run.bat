@@ -10,8 +10,13 @@ del sources.txt
 
 if %errorlevel% equ 0 (
     echo Компиляция успешна!
+    echo Создание JAR файла...
+    cd target\classes
+    jar cfe ..\graph-editor.jar com.grapheditor.Main .
+    cd ..\..
+    echo JAR файл создан: target\graph-editor.jar
     echo Запуск приложения...
-    java -cp target/classes com.grapheditor.Main
+    java -jar target\graph-editor.jar
 ) else (
     echo Ошибка компиляции!
     pause
